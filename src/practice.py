@@ -362,3 +362,57 @@ def t3_7_clean_students(df):
     result["english"] = result["english"].fillna(english_median)
 
     return result
+# task3
+
+# ===== Step 4: Selecting, Filtering and Sorting =====
+
+def t4_1_cheap_products(df):
+    """Select products with a price below 50."""
+    result = df[df["price"] < 50]
+    return result
+
+
+def t4_2_accessories_in_stock(df):
+    """Select accessories that have stock greater than zero."""
+    result = df[
+        (df["category"] == "Accessories") &
+        (df["stock"] > 0)
+    ]
+    return result
+
+
+def t4_3_top_two_by_price(df):
+    """Return the two most expensive products."""
+    result = df.sort_values(
+        by="price",
+        ascending=False
+    ).head(2)
+    return result
+
+
+def t4_4_loc_price(df):
+    """Select the price column using loc."""
+    return df.loc[:, "price"]
+
+
+def t4_5_iloc_block(df):
+    """Select the first three rows and first two columns by position."""
+    return df.iloc[0:3, 0:2]
+
+
+def t4_6_low_stock_or_premium(df):
+    """Select products with low stock or a premium price."""
+    result = df[
+        (df["stock"] < 10) |
+        (df["price"] >= 250)
+    ]
+    return result
+
+
+def t4_7_sort_two_keys(df):
+    """Sort by category ascending and price descending."""
+    result = df.sort_values(
+        by=["category", "price"],
+        ascending=[True, False]
+    )
+    return result
