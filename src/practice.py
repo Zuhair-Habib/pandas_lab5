@@ -568,3 +568,76 @@ def t6_5_train_test_sizes(products):
     test = products.iloc[split_index:]
 
     return (len(train), len(test))
+# task 7
+
+# ===== Part B: Capstone Tasks =====
+
+def t7_1_top_customer(products, orders):
+    """Find the customer who generated the highest total revenue."""
+    merged = orders.merge(
+        products[["product_id", "price"]],
+        on="product_id",
+        how="inner"
+    )
+
+    merged["revenue"] = merged["quantity"] * merged["price"]
+
+    revenue_by_customer = merged.groupby("customer")["revenue"].sum()
+
+    return revenue_by_customer.idxmax()
+
+
+def t7_2_best_selling_product(products, orders):
+    """Find the product with the highest total quantity sold."""
+    merged = orders.merge(
+        products[["product_id", "name"]],
+        on="product_id",
+        how="inner"
+    )
+
+    quantity_by_product = merged.groupby("name")["quantity"].sum()
+
+    return quantity_by_product.idxmax()
+
+
+def t7_3_customer_ranking(products, orders):
+    """Rank customers by total revenue from highest to lowest."""
+    merged = orders.merge(
+        products[["product_id", "price"]],
+        on="product_id",
+        how="inner"
+    )
+
+    merged["revenue"] = merged["quantity"] * merged["price"]
+
+    ranking = (
+        merged.groupby("customer")["revenue"]
+        .sum()
+        .sort_values(ascending=False)
+    )
+
+    return ranking
+
+
+def t7_4_unmatched_orders(products, orders):
+    """Find orders whose product IDs are missing from the catalogue."""
+    unmatched = orders[
+        ~orders["product_id"].isin(products["product_id"])
+    ]
+
+    return unmatched
+
+
+def t7_5_save_report(
+    products,
+    orders,
+    path="customer_revenue_report.csv"
+):
+    """Save the customer revenue ranking to a CSV file."""
+    ranking = t7_3_customer_ranking(products, orders)
+
+    report = ranking.rename("total_revenue").reset_index()
+
+    report.to_csv(path, index=False)
+
+    return report
