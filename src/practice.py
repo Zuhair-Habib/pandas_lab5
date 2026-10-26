@@ -362,7 +362,7 @@ def t3_7_clean_students(df):
     result["english"] = result["english"].fillna(english_median)
 
     return result
-# task3
+# task4
 
 # ===== Step 4: Selecting, Filtering and Sorting =====
 
@@ -416,3 +416,95 @@ def t4_7_sort_two_keys(df):
         ascending=[True, False]
     )
     return result
+
+#  task5
+
+
+# ===== Step 5: Grouping, Merging and Applying Functions =====
+
+def t5_1_stock_by_category(products):
+    """Calculate total stock for each category."""
+    result = products.groupby("category")["stock"].sum()
+    return result
+
+
+def t5_2_avg_price_by_category(products):
+    """Calculate average price for each category, rounded to 2 decimals."""
+    result = products.groupby("category")["price"].mean().round(2)
+    return result
+
+
+def t5_3_category_summary(products):
+    """Summarize product count, average price, and total stock by category."""
+    result = products.groupby("category").agg(
+        product_count=("product_id", "count"),
+        avg_price=("price", "mean"),
+        total_stock=("stock", "sum")
+    )
+    result["avg_price"] = result["avg_price"].round(2)
+    return result
+
+
+def t5_4_left_merge_names(products, orders):
+    """Left merge orders with product names."""
+    result = orders.merge(
+        products[["product_id", "name"]],
+        on="product_id",
+        how="left"
+    )
+    return result
+
+
+def t5_5_inner_merge_rows(products, orders):
+    """Inner merge orders with the product catalogue."""
+    result = orders.merge(
+        products,
+        on="product_id",
+        how="inner"
+    )
+    return result
+
+
+def t5_6_revenue_list(products, orders):
+    """Merge orders with prices and calculate revenue per order."""
+    result = orders.merge(
+        products[["product_id", "price"]],
+        on="product_id",
+        how="left"
+    )
+    result["revenue"] = result["quantity"] * result["price"]
+    return result
+
+
+def t5_7_revenue_by_customer(products, orders):
+    """Calculate total revenue for each customer."""
+    result = orders.merge(
+        products[["product_id", "price"]],
+        on="product_id",
+        how="left"
+    )
+    result["revenue"] = result["quantity"] * result["price"]
+
+    revenue_by_customer = result.groupby("customer")["revenue"].sum()
+    return revenue_by_customer
+
+
+def t5_8_price_label(products):
+    """Label each product as Budget, Mid-range, or Premium."""
+    def label_price(price):
+        if price < 50:
+            return "Budget"
+        elif price < 250:
+            return "Mid-range"
+        else:
+            return "Premium"
+
+    result = products.copy()
+    result["price_label"] = result["price"].apply(label_price)
+    return result
+
+
+def t5_9_upper_names(products):
+    """Convert all product names to uppercase."""
+    return products["name"].str.upper()
+
