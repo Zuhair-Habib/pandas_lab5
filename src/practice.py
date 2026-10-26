@@ -295,3 +295,70 @@ def t2_4_index_trap(df, path):
 
     return len(result.columns)
     
+# task3
+
+# ===== Step 3: Inspection and Cleaning =====
+
+def t3_1_count_missing(df):
+    """Return missing-value counts for each column."""
+    return df.isna().sum().to_dict()
+
+
+def t3_2_math_numeric(df):
+    """Convert math marks to numbers; invalid values become NaN."""
+    return pd.to_numeric(df["math"], errors="coerce").tolist()
+
+
+def t3_3_remove_duplicates(df):
+    """Remove duplicate rows and return the resulting shape."""
+    return df.drop_duplicates().shape
+
+
+def t3_4_fill_english_median(df):
+    """Remove duplicates and fill missing English marks with the median."""
+    result = df.drop_duplicates().copy()
+
+    median_value = result["english"].median()
+
+    result["english"] = result["english"].fillna(median_value)
+
+    return result["english"].tolist()
+
+
+def t3_5_rows_after_dropna(df):
+    """Convert math to numeric, remove duplicates, drop missing rows."""
+    result = df.drop_duplicates().copy()
+
+    result["math"] = pd.to_numeric(
+        result["math"],
+        errors="coerce"
+    )
+
+    result = result.dropna()
+
+    return len(result)
+
+
+def t3_6_section_category(df):
+    """Convert section to category dtype and return its name."""
+    result = df["section"].astype("category")
+
+    return result.dtype.name
+
+
+def t3_7_clean_students(df):
+    """Remove duplicates, convert marks, fill missing values."""
+    result = df.drop_duplicates().copy()
+
+    result["math"] = pd.to_numeric(
+        result["math"],
+        errors="coerce"
+    )
+
+    math_mean = result["math"].mean()
+    english_median = result["english"].median()
+
+    result["math"] = result["math"].fillna(math_mean)
+    result["english"] = result["english"].fillna(english_median)
+
+    return result
