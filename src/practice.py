@@ -219,3 +219,39 @@ def t7_4_unmatched_orders(orders, products):
 def t7_5_save_report(orders, products, path):
     """Save customer revenue totals to CSV without the index."""
     raise NotImplementedError
+
+
+
+# ===== Step 1: Series and DataFrames =====
+
+def t1_1_weather_series(df):
+    """Return temp_c as a Series indexed by day names."""
+    return df.set_index("day")["temp_c"]
+
+# task 
+import pandas as pd
+
+
+# Task 1.1: Set an index and select one column as a Series
+def t1_1_weather_series(df):
+    return df.set_index("day")["temp_c"]
+
+
+# Task 1.2: Find the hottest day
+def t1_2_hottest_day(df):
+    return df.loc[df["temp_c"].idxmax(), "day"]
+
+
+# Task 1.3: Build a DataFrame from a dictionary
+def t1_3_build_frame():
+    return pd.DataFrame({
+        "item": ["pen", "book", "bag"],
+        "price": [10, 120, 800]
+    })
+
+
+# Task 1.4: Compare Series and DataFrame
+def t1_4_series_vs_frame(df):
+    a = type(df["temp_c"]).__name__
+    b = type(df[["temp_c"]]).__name__
+    return (a, b)
