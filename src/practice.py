@@ -255,3 +255,43 @@ def t1_4_series_vs_frame(df):
     a = type(df["temp_c"]).__name__
     b = type(df[["temp_c"]]).__name__
     return (a, b)
+
+# task2
+
+# ===== Step 2: Reading and Writing Files =====
+
+def t2_1_csv_roundtrip(df, path):
+    """Save df to CSV without index, read it back, return its shape."""
+    df.to_csv(path, index=False)
+
+    result = pd.read_csv(path)
+
+    return result.shape
+
+
+def t2_2_json_columns(df, path):
+    """Save df to JSON with one object per row, return column names."""
+    df.to_json(path, orient="records")
+
+    result = pd.read_json(path, orient="records")
+
+    return result.columns.tolist()
+
+
+def t2_3_excel_roundtrip(df, path):
+    """Save df to Excel without index, read it back, return its shape."""
+    df.to_excel(path, index=False)
+
+    result = pd.read_excel(path)
+
+    return result.shape
+
+
+def t2_4_index_trap(df, path):
+    """Save df to CSV with the default index, return the column count."""
+    df.to_csv(path)
+
+    result = pd.read_csv(path)
+
+    return len(result.columns)
+    
